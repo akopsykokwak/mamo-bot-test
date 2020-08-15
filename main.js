@@ -20,8 +20,24 @@ let db = admin.firestore();
 
 
 const { Client, Collection } = require('discord.js');
+const Twitter = require('twit');
+
 const client = new Client();
 client.commands = new Collection();
+
+const twitterClient = new Twitter(twitterConf);
+const destChannelTweets = '727218105562169478'; 
+
+const stream = twitterClient.stream('statuses/filter', {
+  follow: '161223454',
+});
+
+stream.on('tweet', tweet => {
+  const twitterMessage = `${tweet.text}: https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`
+  client.channels.cache.get(destChannelTweets).send(twitterMessage);
+});
+
+
 client.on('guildCreate', async guildData => {
   await db.collection('servers').doc(guildData.id).set({
     'id': guildData.id,
