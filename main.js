@@ -1,5 +1,4 @@
 const fs = require('fs');
-const { twitterConf } = require('./conf')
 require('dotenv/config');
 
 //import settings;
@@ -10,10 +9,13 @@ const token = process.env.TOKEN;
 const firebase = require('firebase/app');
 const FieldValue = require('firebase-admin').firestore.FieldValue;
 const admin = require('firebase-admin');
-const serviceAccount = require('./serviceAccount.json');
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert({
+    "project_id": process.env.FIREBASE_PROJECT_ID,
+    "private_key": process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    "client_email": process.env.FIREBASE_CLIENT_EMAIL,
+  }), databaseURL: "https://mamo-test.firebaseio.com"
 });
 
 let db = admin.firestore();
@@ -25,7 +27,12 @@ const Twitter = require('twit');
 const client = new Client();
 client.commands = new Collection();
 
-const twitterClient = new Twitter(twitterConf);
+const twitterClient = new Twitter({
+  consumer_key: process.env.TWITTER_CONSUMER_KEY,
+  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+  access_token: process.env.TWITTER_ACCESS_TOKEN_KEY,
+  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
+});
 const destChannelTweets = '727218105562169478'; 
 
 const stream = twitterClient.stream('statuses/filter', {
