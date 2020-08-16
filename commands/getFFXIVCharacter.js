@@ -1,7 +1,4 @@
 const axios = require("axios");
-const { MessageEmbed } = require("discord.js");
-
-const image = new MessageEmbed();
 
 module.exports.run = (async function (client, message, args, db) {
 
@@ -11,10 +8,10 @@ module.exports.run = (async function (client, message, args, db) {
     try {
       const interval = setTimeout(() => {
         message.channel.send('Veuillez patienter...')
-        .catch(err => {
-          console.log(error);
-          clearTimeout(interval)
-        })
+          .catch(err => {
+            console.log(error);
+            clearTimeout(interval)
+          })
       }, 1000)
 
       let task = interval;
@@ -25,9 +22,10 @@ module.exports.run = (async function (client, message, args, db) {
           axios.get(`https://xivapi.com/character/${res.data.Results[0].ID}`)
             .then(async res => {
               const data = await res.data.Character
+              console.log(data)
               const id = data.ID.toString()
               db.collection('users').doc(message.author.id).update({
-                'characters': [data.Name]
+                'characterId': data.ID
               })
 
               db.collection('characters').doc(id).set({
@@ -35,16 +33,36 @@ module.exports.run = (async function (client, message, args, db) {
                 'name': data.Name,
                 'server': data.Server,
                 'portrait': data.Portrait,
-                'freeCompanyId': data.FreeCompanyId,
-                'userId': message.author.id
+                'userId': message.author.id,
+                'freeCompanyId': data.FreeCompanyId
               }).then(() => {
-                clearTimeout(task)
-                message.channel.send(`✨ ${data.Name} a bien été enregistré.e pour ${message.author.username} !`)
+                axios.get(`https://xivapi.com/freecompany/${data.FreeCompanyId}?data=FCM`)
+                  .then(async res => {
+                    const fCData = await res.data.FreeCompany;
+                    const fCMembersData = await res.data.FreeCompanyMembers;
+                    const memberRankFC = fCMembersData.find(member => member.ID === data.ID)
+
+                    db.collection('characters').doc(id).collection(`freeCompany`).doc(data.FreeCompanyId).set({
+                      estate: fCData.Estate,
+                      grandCompany: fCData.GrandCompany,
+                      name: fCData.Name,
+                      tag: fCData.Tag,
+                      rank: fCData.Rank,
+                      slogan: fCData.Slogan,
+                      memberRank: memberRankFC.Rank,
+                      memberRankIcon: memberRankFC.RankIcon
+                    }).then(() => {
+                      clearTimeout(task)
+                      message.channel.send(`✨ ${data.Name} a bien été enregistré.e pour ${message.author.username} !`)
+                    })
+
+                  })
+
               })
             })
         })
     } catch (error) {
-      if(error) message.channel.send(`🚫 Il y a eu une erreur pendant le processus.`)
+      if (error) message.channel.send(`🚫 Il y a eu une erreur pendant le processus.`)
     }
   }
 })
