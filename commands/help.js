@@ -13,7 +13,7 @@ module.exports.run = async(client, message, args, db) => {
     let result = jsfiles.forEach((f, i) => {
         let props = require(`./${f}`);
         const embedMessage = new Discord.MessageEmbed()
-        .setColor()
+        .setColor('#50aed4')
         .setTitle(`!${props.help.name}`)
         .setDescription(props.help.description)
 
