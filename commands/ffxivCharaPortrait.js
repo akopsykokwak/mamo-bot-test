@@ -17,7 +17,6 @@ module.exports.run = async (client, message, args, db) => {
         characterId = userRefDoc.data().characterId.toString()
       }
       
-      console.log(characterId)
       const charaRef = db.collection('characters').doc(characterId);
       const charaRefDoc = await charaRef.get();
       let charaData;
