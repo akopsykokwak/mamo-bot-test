@@ -11,5 +11,5 @@ module.exports.run = async (client, message, args, db) => {
 module.exports.help = {
   name: 'horoscope',
   description: "Renvoie l'horoscope d'un signe donné (en anglais)",
-  usage: "! + horoscope + signe astrologique (en anglais)"
+  usage: "!horoscope + signe astrologique (en anglais)"
 }
