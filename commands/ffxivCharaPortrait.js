@@ -33,7 +33,7 @@ module.exports.run = async (client, message, args, db) => {
       const image = new MessageEmbed()
       .setColor('#50aed4')
       .setTitle(`✨ ${charaData.name}`)
-      .setDescription(charaData.server)
+      .setDescription(`${charaData.server} (${charaData.dataCenter})`)
       .addField(`♦️ ${fCData.name} (${fCData.tag})`, fCData.memberRank)
       .setImage(charaData.portrait)
 

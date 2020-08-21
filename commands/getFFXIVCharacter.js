@@ -48,8 +48,11 @@ module.exports.run = (async function (client, message, args, db) {
           'id': charaData.ID,
           'name': charaData.Name,
           'server': charaData.Server,
+          'dataCenter': charaData.DC,
+          'avatar': charaData.Avatar,
           'portrait': charaData.Portrait,
           'userId': message.author.id,
+          'grandCompany': charaData.GrandCompany,
           'freeCompanyId': charaData.FreeCompanyId
         });
 
