@@ -56,7 +56,24 @@ module.exports.run = (async function (client, message, args, db) {
           'freeCompanyId': charaData.FreeCompanyId
         });
 
+        searchCollection(id)
         searchFreeCompany(charaData.FreeCompanyId, id);
+      } catch (error) {
+        console.log(error)
+        message.send.channel(`🚫 Aucun personnage n'a été trouvé avec ces informations.`)
+      }
+    }
+
+    const searchCollection = async charaId => {
+      try {
+        axios.get(`https://ffxivcollect.com/api/characters/${charaId}`).then(res => {
+
+          db.collection('characters').doc(charaId.toString()).update({
+            mounts: res.data.mounts ? res.data.mounts : null,
+            minions: res.data.minions ? res.data.minions : null,
+          });
+
+        })
       } catch (error) {
         console.log(error)
         message.send.channel(`🚫 Aucun personnage n'a été trouvé avec ces informations.`)
@@ -83,6 +100,7 @@ module.exports.run = (async function (client, message, args, db) {
           clearTimeout(task)
           message.channel.send(`✨ ${args[0]} ${args[1]} a bien été enregistré.e pour ${message.author.username} !`)
         })
+
       } catch (error) {
         console.log(error)
         message.send.channel(`🚫 Aucun personnage n'a été trouvé avec ces informations.`)
