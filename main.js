@@ -101,7 +101,7 @@ client.on('message', msg => {
       if (cmd) {
         cmd.run(client, msg, args, db);
       }
-    }
+    } else { msg.channel.send(`🚫 Cette commande n'existe pas. Tu peux utiliser **!help** pour savoir quelle commande utiliser.`) }
   })
 
 });
