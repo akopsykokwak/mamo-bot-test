@@ -41,7 +41,7 @@ const stream = twitterClient.stream('statuses/filter', {
 });
 
 stream.on('tweet', tweet => {
-  if (tweet.user.id === twitterId && tweet.in_reply_to_user_id === null) {
+  if (tweet.user.id === twitterId && tweet.in_reply_to_user_id === null && !tweet.retweeted_status) {
     const twitterMessage = `${tweet.text}: https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`
     client.channels.cache.get(destChannelTweets).send(twitterMessage);
   } else return;
