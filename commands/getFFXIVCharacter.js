@@ -1,5 +1,6 @@
 const axios = require("axios");
-const XIVAPI = require('xivapi-js')
+const XIVAPI = require('xivapi-js');
+const { findFrJob } = require('../ffxivJobs');
 
 const xiv = new XIVAPI({
   private_key: process.env.XIV_KEY,
@@ -41,8 +42,9 @@ module.exports.run = (async function (client, message, args, db) {
 
     const searchCharacter = async id => {
       try {
-        let charaSearchData = await xiv.character.get(id);
+        let charaSearchData = await xiv.character.get(id, {data: 'CJ'});
         const charaData = charaSearchData.Character;
+        const jobsData = charaData.ClassJobs;
 
         db.collection('characters').doc(id.toString()).set({
           'id': charaData.ID,
@@ -55,6 +57,14 @@ module.exports.run = (async function (client, message, args, db) {
           'grandCompany': charaData.GrandCompany,
           'freeCompanyId': charaData.FreeCompanyId
         });
+
+        jobsData.map( data => {
+          axios.get(`https://xivapi.com/ClassJob/${data.ClassID}`).then(res => {
+            let jobType = res.data.ClassJobCategory.Name_fr
+            db.collection('characters').doc(id.toString()).collection('classJobs').doc(data.UnlockedState.Name).set({...data, JobType: jobType});
+          })
+
+        })
 
         searchCollection(id)
         searchFreeCompany(charaData.FreeCompanyId, id);
