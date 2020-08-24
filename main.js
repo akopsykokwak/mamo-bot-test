@@ -33,15 +33,18 @@ const twitterClient = new Twitter({
   access_token: process.env.TWITTER_ACCESS_TOKEN_KEY,
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 });
-const destChannelTweets = '727218105562169478'; 
+const destChannelTweets = '727218105562169478';
 
+const twitterId = 161223454;
 const stream = twitterClient.stream('statuses/filter', {
   follow: '161223454',
 });
 
 stream.on('tweet', tweet => {
-  const twitterMessage = `${tweet.text}: https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`
-  client.channels.cache.get(destChannelTweets).send(twitterMessage);
+  if (tweet.user.id === twitterId && tweet.in_reply_to_user_id === null && !tweet.retweeted_status) {
+    const twitterMessage = `${tweet.text}: https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`
+    client.channels.cache.get(destChannelTweets).send(twitterMessage);
+  } else return;
 });
 
 
@@ -55,22 +58,22 @@ client.on('guildCreate', async guildData => {
   });
 });
 
-fs.readdir('./commands', (err,files) => {
+fs.readdir('./commands', (err, files) => {
   if (err) {
-      console.log(err);
+    console.log(err);
   }
 
   let commandFiles = files.filter(f => f.split(".").pop() === "js");
 
-  if (commandFiles.length === 0){
-      console.log("No files found");
-      return;
+  if (commandFiles.length === 0) {
+    console.log("No files found");
+    return;
   }
 
-  commandFiles.forEach((f,i) => {
-      let props = require(`./commands/${f}`);
-      console.log(`${i+1}: ${f} loaded`);
-      client.commands.set(props.help.name, props);
+  commandFiles.forEach((f, i) => {
+    let props = require(`./commands/${f}`);
+    console.log(`${i + 1}: ${f} loaded`);
+    client.commands.set(props.help.name, props);
   })
 })
 
@@ -80,29 +83,29 @@ client.on('ready', () => {
 
 client.on('message', msg => {
   db.collection('servers').doc(msg.guild.id).get().then((q) => {
-    if(q.exists) {
+    if (q.exists) {
       prefix = q.data().prefix;
     }
-  }).then (() => {
+  }).then(() => {
     if (msg.channel.type === "dm") return;
     if (msg.author.bot) return;
-  
+
     let msg_array = msg.content.split(" ");
     let command = msg_array[0];
     let args = msg_array.slice(1);
-  
+
     if (!command.startsWith(prefix)) return;
-  
+
     if (client.commands.get(command.slice(prefix.length))) {
       let cmd = client.commands.get(command.slice(prefix.length));
       if (cmd) {
         cmd.run(client, msg, args, db);
       }
-    }
+    } else { msg.channel.send(`🚫 Cette commande n'existe pas. Tu peux utiliser **!help** pour savoir quelle commande utiliser.`) }
   })
 
 });
 
 
-  //bot login
-  client.login(token)
+//bot login
+client.login(token)

@@ -16,6 +16,7 @@
     "firebase": "^7.15.5",
     "firebase-admin": "^8.12.1",
     "twit": "^2.2.11",
-    "twitter": "^1.7.1"
+    "twitter": "^1.7.1",
+    "xivapi-js": "^0.3.0"
   }
 }
