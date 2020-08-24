@@ -16,7 +16,7 @@ module.exports.run = async (client, message, args, db) => {
       }
       let result = jsfiles.forEach((f, i) => {
         let props = require(`./${f}`);
-        if(props.help.name.includes(args[0])) selectedCommand = props;
+        if(props.help.name === args[0]) selectedCommand = props;
       });
 
       if(selectedCommand) {
