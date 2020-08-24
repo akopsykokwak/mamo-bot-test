@@ -59,11 +59,7 @@ module.exports.run = (async function (client, message, args, db) {
         });
 
         jobsData.map( data => {
-          axios.get(`https://xivapi.com/ClassJob/${data.ClassID}`).then(res => {
-            let jobType = res.data.ClassJobCategory.Name_fr
-            db.collection('characters').doc(id.toString()).collection('classJobs').doc(data.UnlockedState.Name).set({...data, JobType: jobType});
-          })
-
+            db.collection('characters').doc(id.toString()).collection('classJobs').doc(data.UnlockedState.Name).set(data);
         })
 
         searchCollection(id)
