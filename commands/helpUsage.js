@@ -36,6 +36,7 @@ module.exports.run = async (client, message, args, db) => {
 
 module.exports.help = {
   name: 'helpCommand',
+  category: '🤖 Bot',
   description: "Renvoie l'utilisation d'une commande précise",
   usage: "!helpCommand + nom de la commande"
 }

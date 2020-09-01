@@ -54,6 +54,7 @@ module.exports.run = async (client, message, args, db) => {
 
 module.exports.help = {
   name: 'collection',
+  category: '🎮 FFXIV',
   description: "Donne un aperçu de toutes les collections du personnage",
   usage: "!collection"
 }
