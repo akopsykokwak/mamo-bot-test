@@ -47,6 +47,7 @@ stream.on('tweet', tweet => {
   } else return;
 });
 
+client.queue = new Map();
 
 client.on('guildCreate', async guildData => {
   await db.collection('servers').doc(guildData.id).set({

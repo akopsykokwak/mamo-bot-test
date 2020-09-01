@@ -10,13 +10,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/opus": "^0.3.2",
     "axios": "^0.19.2",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
+    "ffmpeg-static": "^4.2.7",
     "firebase": "^7.15.5",
     "firebase-admin": "^8.12.1",
     "twit": "^2.2.11",
     "twitter": "^1.7.1",
-    "xivapi-js": "^0.3.0"
+    "xivapi-js": "^0.3.0",
+    "ytdl-core": "^3.2.2"
   }
 }
