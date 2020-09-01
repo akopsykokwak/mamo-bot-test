@@ -16,6 +16,7 @@ module.exports.run = async (client, message, args, db) => {
 
 module.exports.help = {
   name: 'user',
+  category: '👤 Utilisateur',
   description: "Enregistre l'utilisateur dans la base de données",
   usage: "!user"
 }

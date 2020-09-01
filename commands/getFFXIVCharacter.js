@@ -124,6 +124,7 @@ module.exports.run = (async function (client, message, args, db) {
 
 module.exports.help = {
   name: 'chara',
+  category: '🎮 FFXIV',
   description: "Enregistre le personnage donné",
   usage: "!chara + Prénom + Nom + Serveur (avec les majuscules à chaque mot)"
 }

@@ -47,6 +47,7 @@ module.exports.run = async (client, message, args, db) => {
 
 module.exports.help = {
   name: 'whoAmI',
+  category: '🎮 FFXIV',
   description: "Donne un portrait du personnage enregistré.",
   usage: "!whoAmI"
 }

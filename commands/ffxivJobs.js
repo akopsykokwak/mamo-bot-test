@@ -51,6 +51,7 @@ module.exports.run = async (client, message, args, db) => {
 
 module.exports.help = {
   name: 'jobs',
+  category: '🎮 FFXIV',
   description: "Retourne la liste des jobs du personnage",
   usage: "!jobs"
 }
