@@ -32,12 +32,27 @@ module.exports.run = async (client, message, args, db) => {
         jobsData.push(doc.data())
       })
 
+      let crafters = [];
+      let dps = [];
+      let mages = [];
+      let gatherers = [];
+
+      const filterCategory = (category, array) => (jobsData
+        .filter(job => job.Category === category)
+        .map(data => array.push(data)));
+
+      filterCategory('combattants', dps);
+      filterCategory('mages', mages);
+      filterCategory('récolteurs', gatherers);
+      filterCategory('artisans', crafters);
+
       let embed = new MessageEmbed()
         .setColor('#50aed4')
         .setTitle(`✨ Jobs de ${charaData.name}`)
-        .addFields(jobsData.map(data => {
-          return { name: findFrJob(data.UnlockedState.Name), value: `${data.Level}`, inline: true }
-        }))
+        .addField(`Combattants`, `${dps.map(data => `${findFrJob(data.data.UnlockedState.Name)} (*${(data.data.Level)}*)`).join('\n')}`)
+        .addField(`Mages`, `${mages.map(data => `${findFrJob(data.data.UnlockedState.Name)} (*${(data.data.Level)}*)`).join('\n')}`, true)
+        .addField(`Artisans`, `${crafters.map(data => `${findFrJob(data.data.UnlockedState.Name)} (*${(data.data.Level)}*)`).join('\n')}`)
+        .addField(`Récolteurs`, `${gatherers.map(data => `${findFrJob(data.data.UnlockedState.Name)} (*${(data.data.Level)}*)`).join('\n')}`, true)
         .setThumbnail(charaData.avatar)
 
       message.channel.send(embed)
