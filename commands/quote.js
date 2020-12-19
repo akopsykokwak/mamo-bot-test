@@ -10,7 +10,7 @@ function embedRandomQuote(randomQuote) {
   let embedQuote = new MessageEmbed()
   .setColor('#50aed4')
   .setTitle(`✨ ${randomQuote.discordName} a dit :`)
-  .setDescription(`"${randomQuote.quote}"`);
+  .setDescription(`"${randomQuote.quote}" (${randomQuote.date})`);
   return embedQuote;
 }
 
